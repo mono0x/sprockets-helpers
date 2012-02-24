@@ -16,6 +16,8 @@ module Sprockets
       # Set the Sprockets environment to search for assets.
       # This defaults to the context's #environment method.
       attr_accessor :environment
+
+      attr_accessor :manifest
       
       # The base URL the Sprocket environment is mapped to.
       # This defaults to "/assets".
@@ -73,6 +75,10 @@ module Sprockets
       # Append extension if necessary
       if options[:ext] && File.extname(source).empty?
         source << ".#{options[:ext]}"
+      end
+
+      if manifest.assets[source]
+        return File.join(Helpers.prefix, manifest.assets[source])
       end
         
       # If the source points to an asset in the Sprockets
@@ -168,6 +174,10 @@ module Sprockets
     # returned by #environment.
     def assets_environment
       Helpers.environment || environment
+    end
+
+    def manifest
+      Helpers.manifest || manifest
     end
   end
   
